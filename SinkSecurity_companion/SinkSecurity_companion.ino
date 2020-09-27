@@ -28,7 +28,7 @@ void loop() {
   message = recieveMessage();
   
   Serial.print("Message: ");
-  Serial.prinln(message);
+  Serial.println(message);
 
   //Free space in memory
   free(message);
@@ -36,11 +36,11 @@ void loop() {
 
 char *recieveMessage(){
   uint8_t buf[MESSAGE_LENGTH];
-  uint8_t buflen = sizeof(bug);
+  uint8_t buflen = sizeof(buf);
 
-  if(driver.recv(buf, &buflen){
+  if(driver.recv(buf, &buflen)){
     return buf;
   } else{
-    return null;
+    return "";
   }
 }
