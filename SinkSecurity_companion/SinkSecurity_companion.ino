@@ -2,8 +2,8 @@
 #include <RH_ASK.h>
 #include <SPI.h>
 
-//PIN Constants
-#define WATER_PIN A1
+//Constants
+#define MESSAGE_LENGTH 12
 
 //Variable Objects
 RH_ASK driver;
@@ -22,13 +22,25 @@ void setup() {
 }
 
 void loop() {
-  int input = analogRead(WATER_PIN);
-  Serial.println(input);
-
+  //Create space for message in memory
+  char *message = (char *) malloc(MESSAGE_LENGTH);
+  //Recieve the message
+  message = recieveMessage();
   
+  Serial.print("Message: ");
+  Serial.prinln(message);
+
+  //Free space in memory
+  free(message);
 }
 
-void recieveMessage(char *msg){
-  driver.send((uint8_t *)msg, strlen(msg));
-  driver.waitPacketSent(); 
+char *recieveMessage(){
+  uint8_t buf[MESSAGE_LENGTH];
+  uint8_t buflen = sizeof(bug);
+
+  if(driver.recv(buf, &buflen){
+    return buf;
+  } else{
+    return null;
+  }
 }
