@@ -2,7 +2,7 @@
 #include <RH_ASK.h>
 #include <SPI.h>
 
-//PIN Constants
+//Constants
 #define WATER_PIN A1
 
 //Variable Objects
@@ -24,8 +24,6 @@ void setup() {
 void loop() {
   int input = analogRead(WATER_PIN);
   Serial.println(input);
-
-  
 }
 
 void sendMessage(char *msg){
