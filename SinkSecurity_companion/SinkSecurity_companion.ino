@@ -38,12 +38,15 @@ void loop() {
   //Check which message has been sent
   if(message == LEVEL_1){ //Level 1: light vibrations.
     Serial.println("Level 1 Detected: Set Vribration Level to ...");
+    setMotorLevel(1);
     
   } else if(message == LEVEL_2){ //Level 2: medium vibrations.
     Serial.println("Level 2 Detected: Set Vribration Level to ...");
+    setMotorLevel(2);
     
   } else if(message == LEVEL_3){ //Level 3: strong vibrations.
     Serial.println("Level 3 Detected: Set Vribration Level to ...");
+    setMotorLevel(3);
    
   } else if(message == LEVEL_0){ //Level 0: disable vibrations.
     Serial.println("Level 0 Detected: Turning off.");
@@ -53,6 +56,11 @@ void loop() {
 
   //Free space in memory
   free(message);
+}
+
+void setMotorLevel(int level){
+  int pwm = (255 / 4) * level;
+  analogWrite(MOTOR_PIN, pwm);
 }
 
 char *recieveMessage(){
