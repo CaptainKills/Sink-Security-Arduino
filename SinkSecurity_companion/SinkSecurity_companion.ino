@@ -3,11 +3,13 @@
 #include <SPI.h>  //Support library for TX/RX library
 
 //Constants
+#define MOTOR_PIN A0
 #define MESSAGE_LENGTH 7
 #define LEVEL_0 "LEVEL_0"
 #define LEVEL_1 "LEVEL_1"
 #define LEVEL_2 "LEVEL_2"
 #define LEVEL_3 "LEVEL_3"
+#define LEVEL_4 "LEVEL_4"
 
 //Variable Objects
 RH_ASK driver;
@@ -23,12 +25,12 @@ void setup() {
   }
 
   //PinMode initialisation
-
+  pinMode(OUTPUT, A0);
 }
 
 void loop() {
   //Create space for message in memory
-  message = (char *) malloc(MESSAGE_LENGTH);
+  message = (char *) malloc(MESSAGE_LENGTH * sizeof(char));
   //Recieve the message
   message = recieveMessage();
   
@@ -36,20 +38,25 @@ void loop() {
   Serial.println(message);
 
   //Check which message has been sent
-  if(message == LEVEL_1){ //Level 1: light vibrations.
-    Serial.println("Level 1 Detected: Set Vribration Level to ...");
+  if(strcmp(*message, LEVEL_1)){ //Level 1: light vibrations.
+    Serial.println("Level 1 Detected: Set Vribration Level to 1");
     setMotorLevel(1);
     
-  } else if(message == LEVEL_2){ //Level 2: medium vibrations.
-    Serial.println("Level 2 Detected: Set Vribration Level to ...");
+  } else if(strcmp(message, LEVEL_2) == 0){ //Level 2: medium vibrations.
+    Serial.println("Level 2 Detected: Set Vribration Level to 2");
     setMotorLevel(2);
     
-  } else if(message == LEVEL_3){ //Level 3: strong vibrations.
-    Serial.println("Level 3 Detected: Set Vribration Level to ...");
+  } else if(strcmp(message, LEVEL_3) == 0){ //Level 3: strong vibrations.
+    Serial.println("Level 3 Detected: Set Vribration Level to 3");
     setMotorLevel(3);
    
-  } else if(message == LEVEL_0){ //Level 0: disable vibrations.
+  } else if(strcmp(message, LEVEL_4) == 0){ //Level 4: strongest vibrations
+    Serial.println("Level 4 Detected: Set Vribration Level to 4");
+    setMotorLevel(4);
+  } else if(strcmp(message, LEVEL_0) == 0){ //Level 0: disable vibrations.
     Serial.println("Level 0 Detected: Turning off.");
+    setMotorLevel(0);
+    
   } else{
     //Default case: no message revieved.
   }
@@ -68,7 +75,7 @@ char *recieveMessage(){
   uint8_t buflen = sizeof(buf);
 
   if(driver.recv(buf, &buflen)){
-    return buf;
+    return (char *) buf;
   } else{
     return "";
   }
