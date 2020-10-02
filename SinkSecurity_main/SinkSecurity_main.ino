@@ -1,6 +1,8 @@
 //Project Libraries
 #include <RH_ASK.h> //Transmitter/Reciever library
-#include <SPI.h> //Support library for TX/RX library
+#ifdef RH_HAVE_HARDWARE_SPI
+#include <SPI.h> // Not actually used but needed to compile
+#endif
 
 //Constants
 #define WATER_PIN A1
