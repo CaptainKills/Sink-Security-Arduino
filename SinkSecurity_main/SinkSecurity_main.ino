@@ -32,24 +32,30 @@ void loop() {
   Serial.println(input);
 
   //Check the ranges of the incoming input
-  if(input <= 0 + INPUT_MARGIN){ //Level 0: do not send anything
-    
-  } else if(input <= 256 + INPUT_MARGIN){ //Level 0: do not send anything
+  if (input <= 0 + INPUT_MARGIN) { //Level 0: do not send anything
+    sendMessage(LEVEL_0);
+
+  } else if (input <= 100 + INPUT_MARGIN) { //Level 0: do not send anything
     sendMessage(LEVEL_1);
-    
-  } else if(input <= 512 + INPUT_MARGIN){ //Level 1: do not send anything
+
+  } else if (input <= 200 + INPUT_MARGIN) { //Level 1: do not send anything
     sendMessage(LEVEL_2);
-    
-  } else if(input <= 768 + INPUT_MARGIN){ //Level 2: do not send anything
+
+  } else if (input <= 300 + INPUT_MARGIN) { //Level 2: do not send anything
     sendMessage(LEVEL_3);
-    
-  } else if(input <= 1024 + INPUT_MARGIN){ //Level 3: do not send anything
+
+  } else if (input <= 400 + INPUT_MARGIN) { //Level 3: do not send anything
     sendMessage(LEVEL_4);
-    
+
   }
+
+  delay(500);
 }
 
-void sendMessage(char *msg){
+void sendMessage(const char *msg) {
+  Serial.print("Sent Message: ");
+  Serial.println(msg);
+
   driver.send((uint8_t *) msg, strlen(msg));
-  driver.waitPacketSent(); 
+  driver.waitPacketSent();
 }
