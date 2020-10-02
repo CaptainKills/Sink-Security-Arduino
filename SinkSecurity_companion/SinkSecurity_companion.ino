@@ -1,6 +1,8 @@
 //Project Libraries
 #include <RH_ASK.h> //Transmitter/Reciever library
-#include <SPI.h>  //Support library for TX/RX library
+#ifdef RH_HAVE_HARDWARE_SPI
+#include <SPI.h> //Support library for TX/RX library
+#endif
 
 //Constants
 #define MOTOR_PIN A0
@@ -12,7 +14,7 @@ const char *LEVEL_3 = "LEVEL_3";
 const char *LEVEL_4 = "LEVEL_4";
 
 //Variable Objects
-RH_ASK driver;
+RH_ASK driver(2000, 2, 3);
 char *message;
 
 void setup() {
