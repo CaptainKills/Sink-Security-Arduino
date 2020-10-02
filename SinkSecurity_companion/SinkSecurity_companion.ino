@@ -5,11 +5,11 @@
 //Constants
 #define MOTOR_PIN A0
 #define MESSAGE_LENGTH 7
-#define LEVEL_0 "LEVEL_0"
-#define LEVEL_1 "LEVEL_1"
-#define LEVEL_2 "LEVEL_2"
-#define LEVEL_3 "LEVEL_3"
-#define LEVEL_4 "LEVEL_4"
+const char *LEVEL_0 = "LEVEL_0";
+const char *LEVEL_1 = "LEVEL_1";
+const char *LEVEL_2 = "LEVEL_2";
+const char *LEVEL_3 = "LEVEL_3";
+const char *LEVEL_4 = "LEVEL_4";
 
 //Variable Objects
 RH_ASK driver;
@@ -38,7 +38,7 @@ void loop() {
   Serial.println(message);
 
   //Check which message has been sent
-  if(strcmp(*message, LEVEL_1)){ //Level 1: light vibrations.
+  if(strcmp(message, LEVEL_1)){ //Level 1: light vibrations.
     Serial.println("Level 1 Detected: Set Vribration Level to 1");
     setMotorLevel(1);
     
