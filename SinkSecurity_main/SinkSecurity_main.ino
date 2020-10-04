@@ -32,20 +32,12 @@ void setup() {
   pinMode(OUTPUT, RLED_PIN);
   pinMode(OUTPUT, GLED_PIN);
   pinMode(OUTPUT, BLED_PIN);
-  setRGB(0, 0, 0);
-  delay(250);
-  setRGB(255, 0, 0);
-  delay(250);
-  setRGB(0, 255, 0);
-  delay(250);
-  setRGB(0, 0, 255);
-  delay(250);
-  setRGB(0, 0, 0);
-  delay(250);
+  setRGB(0, 255, 0); //Set Starting colour: Green
 }
 
 void loop() {
   int input = analogRead(WATER_PIN); //can range from 0-1024
+  Serial.print("Input: ");
   Serial.println(input);
 
   //Check the ranges of the incoming input
@@ -68,7 +60,7 @@ void loop() {
     sendMessage(LEVEL_0);
 
   }
-
+  
   delay(500);
 }
 
