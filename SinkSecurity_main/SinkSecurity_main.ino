@@ -6,12 +6,12 @@
 
 //Constants
 #define WATER_PIN A1
-const char *LEVEL_0 = "LEVEL_0";
-const char *LEVEL_1 = "LEVEL_1";
-const char *LEVEL_2 = "LEVEL_2";
-const char *LEVEL_3 = "LEVEL_3";
-const char *LEVEL_4 = "LEVEL_4";
 #define INPUT_MARGIN 25
+#define LEVEL_0 "LEVEL_0"
+#define LEVEL_1 "LEVEL_1"
+#define LEVEL_2 "LEVEL_2"
+#define LEVEL_3 "LEVEL_3"
+#define LEVEL_4 "LEVEL_4"
 
 //Variable Objects
 RH_ASK driver;
