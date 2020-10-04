@@ -5,17 +5,16 @@
 #endif
 
 //Constants
-#define MOTOR_PIN A0
-#define MESSAGE_LENGTH 7
-const char *LEVEL_0 = "LEVEL_0";
-const char *LEVEL_1 = "LEVEL_1";
-const char *LEVEL_2 = "LEVEL_2";
-const char *LEVEL_3 = "LEVEL_3";
-const char *LEVEL_4 = "LEVEL_4";
+#define MOTOR_PIN 6
+#define BUF_LENGTH 6
+#define LEVEL_0 "LEVEL_0"
+#define LEVEL_1 "LEVEL_1"
+#define LEVEL_2 "LEVEL_2"
+#define LEVEL_3 "LEVEL_3"
+#define LEVEL_4 "LEVEL_4"
 
 //Variable Objects
-RH_ASK driver(2000, 2, 3);
-char *message;
+RH_ASK driver;//(2000, 2, 3);
 
 void setup() {
   //Serial Debugging Setup
@@ -31,16 +30,16 @@ void setup() {
 }
 
 void loop() {
-  //Create space for message in memory
-  message = (char *) malloc(MESSAGE_LENGTH * sizeof(char));
   //Recieve the message
-  message = recieveMessage();
+  char *message = "";
+  recieveMessage(&message);
   
   Serial.print("Message: ");
   Serial.println(message);
+  delay(500);
 
   //Check which message has been sent
-  if(strcmp(message, LEVEL_1)){ //Level 1: light vibrations.
+  if(strcmp(message, LEVEL_1) == 0){ //Level 1: light vibrations.
     Serial.println("Level 1 Detected: Set Vribration Level to 1");
     setMotorLevel(1);
     
@@ -60,11 +59,8 @@ void loop() {
     setMotorLevel(0);
     
   } else{
-    //Default case: no message revieved.
+    //Default case: no message received.
   }
-
-  //Free space in memory
-  free(message);
 }
 
 void setMotorLevel(int level){
@@ -72,13 +68,12 @@ void setMotorLevel(int level){
   analogWrite(MOTOR_PIN, pwm);
 }
 
-char *recieveMessage(){
-  uint8_t buf[MESSAGE_LENGTH];
+void recieveMessage(char **msg){
+  uint8_t buf[BUF_LENGTH];
   uint8_t buflen = sizeof(buf);
 
-  if(driver.recv(buf, &buflen)){
-    return (char *) buf;
-  } else{
-    return "";
+  if(driver.recv(buf, &buflen-1)){
+    buf[BUF_LENGTH] = '\0';
+    *msg = (char *) buf;
   }
 }
