@@ -6,6 +6,9 @@
 
 //Constants
 #define WATER_PIN A1
+#define RLED_PIN 11
+#define GLED_PIN 10
+#define BLED_PIN 9
 #define LEVEL_0 "LEVEL_0"
 #define LEVEL_1 "LEVEL_1"
 #define LEVEL_2 "LEVEL_2"
@@ -26,6 +29,19 @@ void setup() {
 
   //PinMode initialisation
   pinMode(INPUT, WATER_PIN);
+  pinMode(OUTPUT, RLED_PIN);
+  pinMode(OUTPUT, GLED_PIN);
+  pinMode(OUTPUT, BLED_PIN);
+  setRGB(0, 0, 0);
+  delay(250);
+  setRGB(255, 0, 0);
+  delay(250);
+  setRGB(0, 255, 0);
+  delay(250);
+  setRGB(0, 0, 255);
+  delay(250);
+  setRGB(0, 0, 0);
+  delay(250);
 }
 
 void loop() {
@@ -34,6 +50,7 @@ void loop() {
 
   //Check the ranges of the incoming input
   if (input >= 400) { //Level 3: do not send anything
+    setRGB(255, 0, 0); //Red colour: WARNING!
     sendMessage(LEVEL_4);
 
   } else if (input >= 300) { //Level 2: do not send anything
@@ -43,9 +60,11 @@ void loop() {
     sendMessage(LEVEL_2);
 
   } else if (input >= 100) { //Level 0: do not send anything
+    setRGB(255, 255, 0); //Yello colour: 
     sendMessage(LEVEL_1);
 
   } else if (input >= 0) { //Level 0: do not send anything
+    setRGB(0, 255, 0); //Green colour: ok
     sendMessage(LEVEL_0);
 
   }
@@ -59,4 +78,10 @@ void sendMessage(const char *msg) {
 
   driver.send((uint8_t *) msg, strlen(msg));
   driver.waitPacketSent();
+}
+
+void setRGB(int r, int g, int b){  
+  analogWrite(RLED_PIN, r);
+  analogWrite(GLED_PIN, g);
+  analogWrite(BLED_PIN, b);
 }
