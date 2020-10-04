@@ -6,7 +6,6 @@
 
 //Constants
 #define WATER_PIN A1
-#define INPUT_MARGIN 25
 #define LEVEL_0 "LEVEL_0"
 #define LEVEL_1 "LEVEL_1"
 #define LEVEL_2 "LEVEL_2"
@@ -34,20 +33,20 @@ void loop() {
   Serial.println(input);
 
   //Check the ranges of the incoming input
-  if (input <= 0 + INPUT_MARGIN) { //Level 0: do not send anything
-    sendMessage(LEVEL_0);
+  if (input >= 400) { //Level 3: do not send anything
+    sendMessage(LEVEL_4);
 
-  } else if (input <= 100 + INPUT_MARGIN) { //Level 0: do not send anything
-    sendMessage(LEVEL_1);
-
-  } else if (input <= 200 + INPUT_MARGIN) { //Level 1: do not send anything
-    sendMessage(LEVEL_2);
-
-  } else if (input <= 300 + INPUT_MARGIN) { //Level 2: do not send anything
+  } else if (input >= 300) { //Level 2: do not send anything
     sendMessage(LEVEL_3);
 
-  } else if (input <= 400 + INPUT_MARGIN) { //Level 3: do not send anything
-    sendMessage(LEVEL_4);
+  } else if (input >= 200) { //Level 1: do not send anything
+    sendMessage(LEVEL_2);
+
+  } else if (input >= 100) { //Level 0: do not send anything
+    sendMessage(LEVEL_1);
+
+  } else if (input >= 0) { //Level 0: do not send anything
+    sendMessage(LEVEL_0);
 
   }
 
