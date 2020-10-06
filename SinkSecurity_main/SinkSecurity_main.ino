@@ -41,24 +41,22 @@ void loop() {
   Serial.println(input);
 
   //Check the ranges of the incoming input
-  if (input >= 400) { //Level 3: do not send anything
-    setRGB(255, 0, 0); //Red colour: WARNING!
+  if (input >= 400) { //Level 4: Water at the top - Warning!
+    setRGB(255, 0, 0); //Red colour
     sendMessage(LEVEL_4);
-
-  } else if (input >= 300) { //Level 2: do not send anything
+  } else if (input >= 300) { //Level 3: Water approaching top
+    setRGB(255, 255, 0); //Intense Yellow
     sendMessage(LEVEL_3);
-
-  } else if (input >= 200) { //Level 1: do not send anything
+  } else if (input >= 200) { //Level 2: Water Halfway
+    setRGB(255, 255, 102); //Normal Yellow
     sendMessage(LEVEL_2);
-
-  } else if (input >= 100) { //Level 0: do not send anything
-    setRGB(255, 255, 0); //Yello colour: 
+  } else if (input >= 100) { //Level 1: Water touched Sensor
+    setRGB(255, 255, 204); //Light Yello colour
     sendMessage(LEVEL_1);
 
   } else if (input >= 0) { //Level 0: do not send anything
     setRGB(0, 255, 0); //Green colour: ok
     sendMessage(LEVEL_0);
-
   }
   
   delay(500);
