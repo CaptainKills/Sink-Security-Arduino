@@ -4,3 +4,4 @@
 ## Authors
 * **Danick Triantis** - Creator and Developer - [CaptainKills](https://github.com/CaptainKills)
 * **Kaj Coolen** - Creator and Developer - [LEGODesigner26](https://github.com/LEGODesigner26)
+* **Noa Coolen** - Creator and Developer - [Beatbuster](https://github.com/Beatbuster)
