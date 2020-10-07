@@ -1,11 +1,12 @@
 //Project Libraries
 #include <RH_ASK.h> //Transmitter/Reciever library
 #ifdef RH_HAVE_HARDWARE_SPI
-#include <SPI.h> // Not actually used but needed to compile
+#include <SPI.h> //Not actually used but needed to compile
 #endif
 
 //Constants
-#define WATER_PIN A1
+#define WATER_POWER_PIN 2
+#define WATER_SENSOR_PIN A1
 #define RLED_PIN 11
 #define GLED_PIN 10
 #define BLED_PIN 9
@@ -13,7 +14,6 @@
 #define LEVEL_1 "LEVEL_1"
 #define LEVEL_2 "LEVEL_2"
 #define LEVEL_3 "LEVEL_3"
-#define LEVEL_4 "LEVEL_4"
 
 //Variable Objects
 RH_ASK driver;
@@ -28,38 +28,47 @@ void setup() {
   }
 
   //PinMode initialisation
-  pinMode(INPUT, WATER_PIN);
+  pinMode(OUTPUT, WATER_POWER_PIN);
+  pinMode(INPUT, WATER_SENSOR_PIN);
   pinMode(OUTPUT, RLED_PIN);
   pinMode(OUTPUT, GLED_PIN);
   pinMode(OUTPUT, BLED_PIN);
-  setRGB(0, 255, 0); //Set Starting colour: Green
+
+  digitalWrite(WATER_POWER_PIN, LOW);
+  setRGB(0, 200, 0); //Set Starting colour: Green
 }
 
 void loop() {
-  int input = analogRead(WATER_PIN); //can range from 0-1024
+  int input = readWaterSensor(); //can range from 0-1024
   Serial.print("Input: ");
   Serial.println(input);
 
   //Check the ranges of the incoming input
-  if (input >= 400) { //Level 4: Water at the top - Warning!
-    setRGB(255, 0, 0); //Red colour
-    sendMessage(LEVEL_4);
-  } else if (input >= 300) { //Level 3: Water approaching top
-    setRGB(255, 255, 0); //Intense Yellow
+  if (input >= 540) { //Level 3: Warning!
+    setRGB(200, 0, 0); //Intense Yellow
     sendMessage(LEVEL_3);
-  } else if (input >= 200) { //Level 2: Water Halfway
-    setRGB(255, 255, 102); //Normal Yellow
+  } else if (input >= 500) { //Level 2: Water Halfway
+    setRGB(200, 200, 102); //Normal Yellow
     sendMessage(LEVEL_2);
-  } else if (input >= 100) { //Level 1: Water touched Sensor
-    setRGB(255, 255, 204); //Light Yello colour
+  } else if (input >= 300) { //Level 1: Water touched Sensor
+    setRGB(200, 200, 200); //Light Yello colour
     sendMessage(LEVEL_1);
 
-  } else if (input >= 0) { //Level 0: do not send anything
+  } else if (input >= 0) { //Level 0: No Water detected
     setRGB(0, 255, 0); //Green colour: ok
     sendMessage(LEVEL_0);
   }
   
   delay(500);
+}
+
+int readWaterSensor(){
+  digitalWrite(WATER_POWER_PIN, HIGH);
+  delay(10);
+  int sensor_value = analogRead(WATER_SENSOR_PIN);
+  digitalWrite(WATER_POWER_PIN, LOW);
+
+  return sensor_value;
 }
 
 void sendMessage(const char *msg) {
