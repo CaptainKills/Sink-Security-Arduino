@@ -29,9 +29,6 @@ WiFiServer server(80);
 void setup() {
   //Serial Debugging Setup
   Serial.begin(9600);
-  while (!Serial) {
-    ; // wait for serial port to connect. Needed for native USB port only
-  }
 
   //PinMode initialisation
   pinMode(OUTPUT, WATER_POWER_PIN);
@@ -145,7 +142,7 @@ void clientHandler(char level[]){
           client.println();
           
           // Output the value of each analog input pin
-          client.println(level);
+          client.print(level);
           break;
         }
         
