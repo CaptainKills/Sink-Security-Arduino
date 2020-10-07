@@ -1,7 +1,7 @@
 //Project Libraries
 #include <RH_ASK.h> //Transmitter/Reciever library
 #ifdef RH_HAVE_HARDWARE_SPI
-#include <SPI.h> //Support library for TX/RX library
+#include <SPI.h> //Not actually used but needed to compile
 #endif
 
 //Constants
@@ -11,10 +11,9 @@
 #define LEVEL_1 "LEVEL_1"
 #define LEVEL_2 "LEVEL_2"
 #define LEVEL_3 "LEVEL_3"
-#define LEVEL_4 "LEVEL_4"
 
 //Variable Objects
-RH_ASK driver;//(2000, 2, 3);
+RH_ASK driver(2000, 2, 3);
 
 void setup() {
   //Serial Debugging Setup
@@ -51,9 +50,6 @@ void loop() {
     Serial.println("Level 3 Detected: Set Vribration Level to 3");
     setMotorLevel(3);
    
-  } else if(strcmp(message, LEVEL_4) == 0){ //Level 4: strongest vibrations
-    Serial.println("Level 4 Detected: Set Vribration Level to 4");
-    setMotorLevel(4);
   } else if(strcmp(message, LEVEL_0) == 0){ //Level 0: disable vibrations.
     Serial.println("Level 0 Detected: Turning off.");
     setMotorLevel(0);
@@ -64,7 +60,10 @@ void loop() {
 }
 
 void setMotorLevel(int level){
-  int pwm = (255 / 4) * level;
+  int pwm = 0;
+  if(level != 0){
+    pwm = 105 + (50 * level);
+  }
   analogWrite(MOTOR_PIN, pwm);
 }
 
