@@ -4,11 +4,12 @@
 #ifdef RH_HAVE_HARDWARE_SPI
 #include <SPI.h> // Not actually used but needed to compile
 #endif
+#include "LowPower.h"
 #include "arduino_secrets.h" 
 
 //Constants
-#define WATER_POWER_PIN 2
 #define WATER_SENSOR_PIN A7
+#define INTERRUPT_PIN 2
 #define RLED_PIN 11
 #define GLED_PIN 10
 #define BLED_PIN 9
@@ -31,13 +32,11 @@ void setup() {
   Serial.begin(9600);
 
   //PinMode initialisation
-  pinMode(OUTPUT, WATER_POWER_PIN);
-  pinMode(INPUT, WATER_SENSOR_PIN);
-  pinMode(OUTPUT, RLED_PIN);
-  pinMode(OUTPUT, GLED_PIN);
-  pinMode(OUTPUT, BLED_PIN);
-
-  digitalWrite(WATER_POWER_PIN, LOW);
+  pinMode(WATER_SENSOR_PIN, INPUT);
+  pinMode(INTERRUPT_PIN, INPUT_PULLUP);
+  pinMode(RLED_PIN, OUTPUT);
+  pinMode(GLED_PIN, OUTPUT);
+  pinMode(BLED_PIN, OUTPUT);
   setRGB(0, 200, 0); //Set Starting colour: Green
 
   // Check for the WiFi module:
@@ -67,7 +66,15 @@ void setup() {
 }
 
 void loop() {
-  int input = readWaterSensor();
+  // Check for On/Off Touch sensor:
+  int on_off = digitalRead(INTERRUPT_PIN);
+
+  if(on_off == LOW){
+    ArduinoSleep();
+  }
+
+  // Read the water-level sensor
+  int input = analogRead(WATER_SENSOR_PIN);
   Serial.print("Input: ");
   Serial.println(input);
 
@@ -92,15 +99,6 @@ void loop() {
   }
   
   clientHandler(current_level);
-}
-
-int readWaterSensor(){
-  digitalWrite(WATER_POWER_PIN, HIGH);
-  delay(100);
-  int sensor_value = analogRead(WATER_SENSOR_PIN);
-  digitalWrite(WATER_POWER_PIN, LOW);
-
-  return sensor_value;
 }
 
 void sendMessage(const char *msg) {
@@ -179,4 +177,28 @@ void printWifiStatus() {
   Serial.print("signal strength (RSSI):");
   Serial.print(rssi);
   Serial.println(" dBm");
+}
+
+void ArduinoSleep(){
+  Serial.println("Arduino going to sleep!");
+  setRGB(0,0,0);
+  
+  attachInterrupt(0, ArduinoWakeUp, HIGH); //Attach interrupt pint do d2
+  LowPower.idle(IDLE_2); // Setting the sleep mode, in our case full sleep
+  
+  delay(1000);
+  Serial.println("Just woke up!");
+}
+
+void ArduinoWakeUp(){
+  Serial.println("Interrupt Fired!");
+  int input = digitalRead(INTERRUPT_PIN);
+
+  if(input == HIGH){
+    Serial.println("Arduino waking up!");
+    setRGB(0, 250, 0);
+    detachInterrupt(0);
+  } else{
+    Serial.println("Misfire -> Continue!");
+  }
 }
