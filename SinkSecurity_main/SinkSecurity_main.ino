@@ -93,7 +93,6 @@ void loop() {
     setRGB(200, 200, 200); //Light Yello colour
     current_level = LEVEL_1;
     sendMessage(LEVEL_1);
-
   } else if (input >= 0) { //Level 0: No Water detected
     setRGB(0, 255, 0); //Green colour: ok
     current_level = LEVEL_0;
@@ -137,7 +136,7 @@ void clientHandler(char level[]){
           // Send a standard http response header
           client.println("HTTP/1.1 200 OK");
           client.println("Content-Type: text/html");
-          client.println("Connection: close");  // the connection will be closed after completion of the response
+          client.println("Connection: close");  // the connection will be closed after response
           client.println("Refresh: 5");  // refresh the page automatically every 5 sec
           client.println();
           
