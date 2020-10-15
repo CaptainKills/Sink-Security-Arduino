@@ -63,6 +63,8 @@ void setup() {
     Serial.println("Driver initialisation failed!");
     while (true);
   }
+
+  attachInterrupt(INTERRUPT_PIN, ArduinoSleep, LOW);
 }
 
 void loop() {
@@ -181,24 +183,16 @@ void printWifiStatus() {
 
 void ArduinoSleep(){
   Serial.println("Arduino going to sleep!");
-  setRGB(0,0,0);
-  
-  attachInterrupt(0, ArduinoWakeUp, HIGH); //Attach interrupt pint do d2
-  LowPower.idle(IDLE_2); // Setting the sleep mode, in our case full sleep
-  
-  delay(1000);
-  Serial.println("Just woke up!");
+  setRGB(0,0,0); //Turn off LED to show the Arduino is going to sleep
+
+  detachInterrupt(INTERRUPT_PIN);
+  attachInterrupt(INTERRUPT_PIN, ArduinoWake, HIGH); //Attach interrupt pint do d2
+  LowPower.standby(); // Setting the sleep mode, in our case full sleep
 }
 
-void ArduinoWakeUp(){
-  Serial.println("Interrupt Fired!");
-  int input = digitalRead(INTERRUPT_PIN);
-
-  if(input == HIGH){
-    Serial.println("Arduino waking up!");
-    setRGB(0, 250, 0);
-    detachInterrupt(0);
-  } else{
-    Serial.println("Misfire -> Continue!");
-  }
+void ArduinoWake(){
+  Serial.println("Arduino waking up!");
+  setRGB(0, 250, 0); // Turn on LED to show the Arduino is back up
+  detachInterrupt(INTERRUPT_PIN);
+  attachInterrupt(INTERRUPT_PIN, ArduinoSleep, LOW);
 }
