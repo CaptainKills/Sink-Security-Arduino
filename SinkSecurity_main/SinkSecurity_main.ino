@@ -4,7 +4,6 @@
 #ifdef RH_HAVE_HARDWARE_SPI
 #include <SPI.h> // Not actually used but needed to compile
 #endif
-#include "LowPower.h"
 #include "arduino_secrets.h" 
 
 //Constants
@@ -63,8 +62,6 @@ void setup() {
     Serial.println("Driver initialisation failed!");
     while (true);
   }
-
-  attachInterrupt(INTERRUPT_PIN, ArduinoSleep, LOW);
 }
 
 void loop() {
@@ -184,14 +181,11 @@ void ArduinoSleep(){
   Serial.println("Arduino going to sleep!");
   setRGB(0,0,0); //Turn off LED to show the Arduino is going to sleep
 
-  detachInterrupt(INTERRUPT_PIN);
-  attachInterrupt(INTERRUPT_PIN, ArduinoWake, HIGH); //Attach interrupt pint do d2
-  LowPower.standby(); // Setting the sleep mode, in our case full sleep
-}
+  while(digitalRead(INTERRUPT_PIN) == LOW){
+    Serial.println("Waiting...");
+    delay(2000);
+  }
 
-void ArduinoWake(){
   Serial.println("Arduino waking up!");
   setRGB(0, 250, 0); // Turn on LED to show the Arduino is back up
-  detachInterrupt(INTERRUPT_PIN);
-  attachInterrupt(INTERRUPT_PIN, ArduinoSleep, LOW);
 }
