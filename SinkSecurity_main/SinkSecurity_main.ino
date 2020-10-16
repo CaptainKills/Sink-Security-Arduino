@@ -91,7 +91,7 @@ void loop() {
     current_level = LEVEL_1;
     sendMessage(LEVEL_1);
   } else if (input >= 0) { //Level 0: No Water detected
-    setRGB(0, 255, 0); //Green colour: ok
+    setRGB(0, 200, 0); //Green colour: ok
     current_level = LEVEL_0;
     sendMessage(LEVEL_0);
   }
@@ -180,12 +180,12 @@ void printWifiStatus() {
 void ArduinoSleep(){
   Serial.println("Arduino going to sleep!");
   setRGB(0,0,0); //Turn off LED to show the Arduino is going to sleep
-
+ 
   while(digitalRead(INTERRUPT_PIN) == LOW){
     Serial.println("Waiting...");
     delay(2000);
   }
 
   Serial.println("Arduino waking up!");
-  setRGB(0, 250, 0); // Turn on LED to show the Arduino is back up
+  setRGB(0, 200, 0); // Turn on LED to show the Arduino is back up
 }
