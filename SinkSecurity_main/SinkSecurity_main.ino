@@ -45,7 +45,7 @@ void setup() {
   }
 
   // Check if WiFi credentials are not empty:
-  if(ssid.length == 0 || pass.length == 0){
+  if(sizeof(ssid) == 0 || sizeof(pass) == 0){
     Serial.println("No WiFi Credentials Detected!");
     while (true);
   }
