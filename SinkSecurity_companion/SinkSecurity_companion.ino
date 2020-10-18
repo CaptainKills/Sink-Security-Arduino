@@ -13,20 +13,19 @@
 #define LEVEL_3 "LEVEL_3"
 
 //Variable Objects
-RH_ASK driver(2000, 2, 3);
+RH_ASK driver(2000, 2, 3, 0);
 
 void setup() {
   //Serial Debugging Setup
-  //Serial.begin(9600);
+  Serial.begin(9600);
 
   //Driver initialisation
-  //if(!driver.init()){
-    //Serial.println("Driver initialisation failed!");
-  //}
+  if(!driver.init()){
+    Serial.println("Driver initialisation failed!");
+  }
 
   //PinMode initialisation
   pinMode(MOTOR_PIN, OUTPUT);
-  setMotorLevel(1);
 }
 
 void loop() {
@@ -34,24 +33,24 @@ void loop() {
   char *message = "";
   recieveMessage(&message);
   
-  //Serial.print("Message: ");
-  //Serial.println(message);
+  Serial.print("Message: ");
+  Serial.println(message);
 
   //Check which message has been sent
   if(strcmp(message, LEVEL_1) == 0){ //Level 1: light vibrations.`
-    //Serial.println("Level 1 Detected: Set Vribration Level to 1");
+    Serial.println("Level 1 Detected: Set Vribration Level to 1");
     setMotorLevel(1);
     
   } else if(strcmp(message, LEVEL_2) == 0){ //Level 2: medium vibrations.
-    //Serial.println("Level 2 Detected: Set Vribration Level to 2");
+    Serial.println("Level 2 Detected: Set Vribration Level to 2");
     setMotorLevel(2); 
     
   } else if(strcmp(message, LEVEL_3) == 0){ //c 3: strong vibrations.
-    //Serial.println("Level 3 Detected: Set Vribration Level to 3");
+    Serial.println("Level 3 Detected: Set Vribration Level to 3");
     setMotorLevel(3);
    
   } else if(strcmp(message, LEVEL_0) == 0){ //Level 0: disable vibrations.
-    //Serial.println("Level 0 Detected: Turning off.");
+    Serial.println("Level 0 Detected: Turning off.");
     setMotorLevel(0);
     
   } else{
