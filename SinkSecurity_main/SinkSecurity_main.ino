@@ -44,6 +44,12 @@ void setup() {
     while (true);
   }
 
+  // Check if WiFi credentials are not empty:
+  if(ssid.length == 0 || pass.length == 0){
+    Serial.println("No WiFi Credentials Detected!");
+    while (true);
+  }
+
   // Attempt to connect to Wifi network:
   while (status != WL_CONNECTED) {
     Serial.print("Attempting to connect to SSID: ");
